@@ -5,7 +5,7 @@ from BabySitterFeeCalculator import BabySitterFeeCalculator
 class TestBabySitterFeeCalulator(unittest.TestCase):
     """Tests for the BabySitterFeeCalculator."""
 
-    def testWhenANumberBeforeTheStartTimeIsPassedReturnError(self):
+    def testWhenANumberBeforeTheMinStartTimeIsPassedReturnError(self):
         """When the start time is before 5:00pm, an error should be returned."""
         feeCalculator = BabySitterFeeCalculator()
         with self.assertRaises(Exception) as context:
@@ -17,6 +17,12 @@ class TestBabySitterFeeCalulator(unittest.TestCase):
         feeCalculator = BabySitterFeeCalculator()
         calculatedFee = feeCalculator.calculateFeeFromStartToBedtime(startTime=17, bedTime=22)
         self.assertEquals(calculatedFee, 60.0)
+
+    def testCalculateFeeFromBedtimeToMidnightWhenBedtimeIsBeforeMidnight(self):
+        """When the bed time is 10:00pm calculate the correct fee until midnight."""
+        feeCalculator = BabySitterFeeCalculator()
+        calculatedFee = feeCalculator.calculateFeeFromBedtimeToMidnight(bedTime=22)
+        self.assertEquals(calculatedFee, 16.0)
 
 
 if __name__ == '__main__':

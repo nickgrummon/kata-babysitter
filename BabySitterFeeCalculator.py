@@ -12,12 +12,15 @@ class BabySitterFeeCalculator:
     gets paid $16/hour from midnight to end of job
     gets paid for full hours (no fractional hours)
     """
+    def __init__(self):
+        self.today = datetime.datetime.today()
+
     # [ Internals ]
-    def _calculate_difference_between_hours(self, endTime, initialTime):
+    def _calculate_difference_between_datetimes(self, latestDateTime, initialDateTime):
         """Return the difference in hours between two datetimes."""
-        latestTime = datetime.datetime.combine(datetime.date.today(), endTime)
-        earlierTime = datetime.datetime.combine(datetime.date.today(), initialTime)
-        difference = latestTime - earlierTime
+        endTime = datetime.datetime.combine(latestDateTime.date(), latestDateTime.time())
+        earlierTime = datetime.datetime.combine(initialDateTime.date(), initialDateTime.time())
+        difference = endTime - earlierTime
         return difference.total_seconds() / 3600
 
 
@@ -28,13 +31,23 @@ class BabySitterFeeCalculator:
         The default value for bedtime is midnight.
         The rate for this time period is $12/hr.
         """
-
         start = datetime.time(hour=startTime)
         if start < datetime.time(hour=17):
             raise Exception('The start time can not be before 5pm!')
         end = datetime.time(hour=bedTime)
-        return self._calculate_difference_between_hours(end, start) * 12
+        startDateTime = datetime.datetime(self.today.date().year, self.today.date().month, self.today.date().day, hour=startTime)
+        endDateTime = datetime.datetime(self.today.date().year, self.today.date().month, self.today.date().day, hour=bedTime)
+        return self._calculate_difference_between_datetimes(endDateTime, startDateTime) * 12
 
+
+    def calculateFeeFromBedtimeToMidnight(self, bedTime):
+        """
+        Given bed time, calculate the amount of the fee between bed time and midnight.
+        The rate for this time period is $8/hr.
+        """
+        bedDateTime = datetime.datetime(self.today.date().year, self.today.date().month, self.today.date().day, hour=bedTime)
+        midnightDateTime = datetime.datetime.combine(self.today.date(), self.today.min.time()) + datetime.timedelta(days=1)
+        return self._calculate_difference_between_datetimes(midnightDateTime, bedDateTime) * 8
 
 
 FeeCalculator = BabySitterFeeCalculator()
