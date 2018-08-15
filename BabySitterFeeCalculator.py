@@ -31,10 +31,8 @@ class BabySitterFeeCalculator:
         The default value for bedtime is midnight.
         The rate for this time period is $12/hr.
         """
-        start = datetime.time(hour=startTime)
-        if start < datetime.time(hour=17):
+        if startTime < 17:
             raise Exception('The start time can not be before 5pm!')
-        end = datetime.time(hour=bedTime)
         startDateTime = datetime.datetime(self.today.date().year, self.today.date().month, self.today.date().day, hour=startTime)
         endDateTime = datetime.datetime(self.today.date().year, self.today.date().month, self.today.date().day, hour=bedTime)
         return self._calculate_difference_between_datetimes(endDateTime, startDateTime) * 12
@@ -46,6 +44,18 @@ class BabySitterFeeCalculator:
         The rate for this time period is $8/hr.
         """
         bedDateTime = datetime.datetime(self.today.date().year, self.today.date().month, self.today.date().day, hour=bedTime)
+        midnightDateTime = datetime.datetime.combine(self.today.date(), self.today.min.time()) + datetime.timedelta(days=1)
+        return self._calculate_difference_between_datetimes(midnightDateTime, bedDateTime) * 8
+
+
+    def calculateFeeFromMidnightToEnd(self, endTime):
+        """
+        Given end time, calculate the amount of the fee between midnight and the end of the job.
+        The rate for this time period is $16/hr.
+        """
+        if 17 > endTime > 4:
+            raise Exception('The end time can not be after 4am!')
+        endDateTime = datetime.datetime(self.today.date().year, self.today.date().month, self.today.date().day, hour=endTime)
         midnightDateTime = datetime.datetime.combine(self.today.date(), self.today.min.time()) + datetime.timedelta(days=1)
         return self._calculate_difference_between_datetimes(midnightDateTime, bedDateTime) * 8
 
