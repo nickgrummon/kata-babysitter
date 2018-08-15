@@ -37,6 +37,11 @@ class TestBabySitterFeeCalulator(unittest.TestCase):
         calculatedFee = feeCalculator.calculateFeeFromMidnightToEnd(endTime=4)
         self.assertEquals(calculatedFee, 64.0)
 
+    def testCalculateMaxFee(self):
+        """Calculate the fee for a full night of babysitter work."""
+        feeCalculator = BabySitterFeeCalculator()
+        calculatedFee = feeCalculator.calculateTotalFee(startTime=17, bedTime=0, endTime=4)
+        self.assertEquals(calculatedFee, 148.0)
 
 if __name__ == '__main__':
     unittest.main()
