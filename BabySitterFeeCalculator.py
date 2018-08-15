@@ -25,10 +25,10 @@ class BabySitterFeeCalculator:
 
 
     # [ Main ]
-    def calculateFeeFromStartToBedtime(self, startTime, bedTime=0):
+    def calculateFeeFromStartToBedtime(self, startTime, bedTime):
         """
         Given valid start time and bed time calculate the amount of the fee.
-        The default value for bedtime is midnight.
+        The default value for bedtime is midnight set in calculateFeeFromMidnightToEnd.
         The rate for this time period is $12/hr.
         """
         if startTime < 17:
@@ -41,10 +41,10 @@ class BabySitterFeeCalculator:
         return self._calculate_difference_between_datetimes(bedDateTime, startDateTime) * 12
 
 
-    def calculateFeeFromBedtimeToMidnight(self, bedTime=0):
+    def calculateFeeFromBedtimeToMidnight(self, bedTime):
         """
         Given bed time, calculate the amount of the fee between bed time and midnight.
-        The default value for bedTime is midnight.
+        The default value for bedTime is midnight set in calculateFeeFromMidnightToEnd.
         The rate for this time period is $8/hr.
         """
         bedDateTime = datetime.datetime(self.today.date().year, self.today.date().month, self.today.date().day, hour=bedTime)
@@ -70,7 +70,7 @@ class BabySitterFeeCalculator:
         return self._calculate_difference_between_datetimes(midnightDateTime, endDateTime) * 16
 
 
-    def calculateTotalFee(self, startTime, bedTime, endTime):
+    def calculateTotalFee(self, startTime, endTime, bedTime=0):
         """Given the start time, the bed time, and the end time, calculate the total fee for the babysitter work."""
         return self.calculateFeeFromStartToBedtime(startTime, bedTime) + self.calculateFeeFromBedtimeToMidnight(bedTime) + self.calculateFeeFromMidnightToEnd(endTime)
 

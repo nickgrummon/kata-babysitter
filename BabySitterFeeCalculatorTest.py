@@ -43,12 +43,17 @@ class TestBabySitterFeeCalulator(unittest.TestCase):
         calculatedFee = feeCalculator.calculateTotalFee(startTime=17, bedTime=0, endTime=4)
         self.assertEquals(calculatedFee, 148.0)
 
-
     def testCalculateFeeWhenBedtimeIsBeforeMidnightAndEndIsBeforeMax(self):
         """Calculate the fee for when bedtime is before midnight and endtime is before max endtime."""
         feeCalculator = BabySitterFeeCalculator()
         calculatedFee = feeCalculator.calculateTotalFee(startTime=17, bedTime=22, endTime=2)
         self.assertEquals(calculatedFee, 108.0)
+
+    def testCalculateFeeWhenBedtimeIsIsNotSpecified(self):
+        """Calculate the fee for when bedtime is not specified."""
+        feeCalculator = BabySitterFeeCalculator()
+        calculatedFee = feeCalculator.calculateTotalFee(startTime=17, endTime=4)
+        self.assertEquals(calculatedFee, 148.0)
 
 if __name__ == '__main__':
     unittest.main()
