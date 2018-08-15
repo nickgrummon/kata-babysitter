@@ -57,7 +57,10 @@ class BabySitterFeeCalculator:
             raise Exception('The end time can not be after 4am!')
         endDateTime = datetime.datetime(self.today.date().year, self.today.date().month, self.today.date().day, hour=endTime)
         midnightDateTime = datetime.datetime.combine(self.today.date(), self.today.min.time()) + datetime.timedelta(days=1)
-        return self._calculate_difference_between_datetimes(midnightDateTime, bedDateTime) * 8
+        if endTime < 17:
+            endDateTimeDelta = datetime.datetime.combine(endDateTime.date(), endDateTime.time()) + datetime.timedelta(days=1)
+            return self._calculate_difference_between_datetimes(endDateTimeDelta, midnightDateTime) * 16
+        return self._calculate_difference_between_datetimes(midnightDateTime, endDateTime) * 16
 
 
 FeeCalculator = BabySitterFeeCalculator()

@@ -31,6 +31,12 @@ class TestBabySitterFeeCalulator(unittest.TestCase):
             feeCalculator.calculateFeeFromMidnightToEnd(endTime=5)
         self.assertTrue('The end time can not be after 4am!' in context.exception)
 
+    def testCalculateFeeFromMidnightToLatestEnd(self):
+        """When the end time is 4:00am, calculate the correct fee since midnight."""
+        feeCalculator = BabySitterFeeCalculator()
+        calculatedFee = feeCalculator.calculateFeeFromMidnightToEnd(endTime=4)
+        self.assertEquals(calculatedFee, 64.0)
+
 
 if __name__ == '__main__':
     unittest.main()
